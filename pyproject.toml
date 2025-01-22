@@ -1,7 +1,13 @@
 [project]
 name = "proc-houston-ta"
 version = "0.1.0"
-description = "Add your description here"
+description = "Houston Materials Data Matching for semantic similarity analysis using NLP techniques."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "pandas",
+    "openpyxl",
+    "linktransformer",
+    "evaluate",
+    "regex"
+]
