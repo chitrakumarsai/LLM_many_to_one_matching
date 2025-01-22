@@ -72,8 +72,6 @@ python script1.py
 3. **Semantic Matching**:
    - Uses the `linktransformer` library to perform 1-to-many matching of text fields.
 
-4. **Output**:
-   - Displays the top 10 matched records.
 
 ## Sample Output
 
