@@ -23,6 +23,6 @@ df2['PLANT_TEXT'] = df2['DESCRIPTION'].astype('str').apply(clean_and_tokenize)
 
 df_lm_matched = lt.merge(df1, df2, merge_type='1:m', model="all-MiniLM-L6-v2", left_on="SAP_TEXT", right_on="PLANT_TEXT")
 df_lm_matched.sort_values(by='score', ascending=False, inplace=False)
-df_lm_matched.to_excel('../data/df_lm_matched.xlsx', index=False)
+df_lm_matched.to_excel('../data/Houston_data_matched.xlsx', index=False)
 
 # %%
