@@ -7,7 +7,7 @@ import re
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 file_path1 = os.path.join(BASE_DIR, "data", "Houston SAP Materials.xlsx")
 file_path2 = os.path.join(BASE_DIR, "data", "Material list 011625.xlsx")
-
+DEST_DIR = os.path.join(BASE_DIR, "data")
 df1 = pd.read_excel(file_path1, engine='openpyxl')
 df1.columns = [re.sub(r'[^a-zA-Z0-9]', "_",\
                          col.replace(' ', "_")).upper() for col in df1.columns]
@@ -28,6 +28,6 @@ df2['PLANT_TEXT'] = df2['DESCRIPTION'].astype('str').apply(clean_and_tokenize)
 
 df_lm_matched = lt.merge(df1, df2, merge_type='1:m', model="all-MiniLM-L6-v2", left_on="SAP_TEXT", right_on="PLANT_TEXT")
 df_lm_matched.sort_values(by='score', ascending=False, inplace=False)
-df_lm_matched.to_excel('../data/Houston_data_matched.xlsx', index=False)
+df_lm_matched.to_excel(DEST_DIR + 'Houston_data_matched.xlsx', index=False)
 
 # %%
