@@ -1,12 +1,17 @@
 #%%
 import pandas as pd
 import linktransformer as lt
+import os
 import re
 
-df1 = pd.read_excel('../data/Houston SAP Materials.xlsx', engine='openpyxl')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+file_path1 = os.path.join(BASE_DIR, "data", "Houston SAP Materials.xlsx")
+file_path2 = os.path.join(BASE_DIR, "data", "Material list 011625.xlsx")
+
+df1 = pd.read_excel(file_path1, engine='openpyxl')
 df1.columns = [re.sub(r'[^a-zA-Z0-9]', "_",\
                          col.replace(' ', "_")).upper() for col in df1.columns]
-df2 = pd.read_excel('../data/Material list 011625.xlsx', engine='openpyxl', skiprows=1)
+df2 = pd.read_excel(file_path2, engine='openpyxl', skiprows=1)
 df2.columns = [re.sub(r'[^a-zA-Z0-9]', "_",\
                             col.replace(' ', "_")).upper() for col in df2.columns]
 # Function to clean, tokenize, and convert to lowercase
