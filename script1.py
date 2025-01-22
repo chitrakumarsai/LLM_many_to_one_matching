@@ -1,6 +1,5 @@
 #%%
 import pandas as pd
-import os
 import linktransformer as lt
 import re
 
