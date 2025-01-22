@@ -113,6 +113,3 @@ The error indicates that the `linktransformer` package's `train_clf_model.py` fi
 3. **Save the Changes**:
    Save the file and re-run your script.
 
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
