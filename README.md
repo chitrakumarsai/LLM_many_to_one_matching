@@ -58,7 +58,7 @@ The script requires the following Python libraries:
 
 Run the script to process and match the data:
 ```bash
-python script.py
+python script1.py
 ```
 
 ### Key Steps in the Script:
