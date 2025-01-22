@@ -10,6 +10,7 @@ This script processes and matches material data from two Excel files using natur
 - [Setup](#setup)
 - [Usage](#usage)
 - [Sample Output](#sample-output)
+- [Troubleshooting](#troubleshooting)
 - [License](#license)
 
 ## Overview
@@ -82,6 +83,35 @@ python script.py
 | ...         | ...                | ...                                | ... | ...     | ...    |
 
 The output includes matched records with similarity scores.
+
+## Troubleshooting
+
+### Error: Deprecated `load_metric` Import in `linktransformer`
+The error indicates that the `linktransformer` package's `train_clf_model.py` file is still trying to import `load_metric` from the `datasets` library, even though it has been deprecated. To resolve this, you need to update the `linktransformer` package code or use a compatible older version of the `datasets` library.
+
+### Resolution Steps
+
+#### Option 1: Update the `linktransformer` Code
+
+1. **Locate the `train_clf_model.py` File**:
+   Navigate to the file path:
+   ```bash
+   /Users/.venv/lib/python3.10/site-packages/linktransformer/train_clf_model.py
+   ```
+
+2. **Edit the Import Statement**:
+   Replace the `load_metric` import with `load` from the `evaluate` library. Open the file in an editor and update:
+   ```python
+   from datasets import load_dataset, load_metric, DatasetDict
+   ```
+   to:
+   ```python
+   from datasets import load_dataset, DatasetDict
+   from evaluate import load as load_metric
+   ```
+
+3. **Save the Changes**:
+   Save the file and re-run your script.
 
 ## License
 
