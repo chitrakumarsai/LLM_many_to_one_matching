@@ -279,4 +279,5 @@
 pandas
 openpyxl
 linktransformer
+streamlit
 datasets==2.3.2  # If not using evaluate
