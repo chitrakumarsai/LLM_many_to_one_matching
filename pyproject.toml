@@ -9,5 +9,6 @@ dependencies = [
     "openpyxl",
     "linktransformer==0.1.16",
     "evaluate",
-    "regex"
+    "regex",
+    "streamlit"
 ]

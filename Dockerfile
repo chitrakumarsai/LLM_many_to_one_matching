@@ -17,4 +17,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the script
-CMD ["python", "script1.py"]
+CMD ["streamlit", "run", "script2.py"]
