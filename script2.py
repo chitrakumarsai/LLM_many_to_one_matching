@@ -36,29 +36,45 @@ df_lm_matched = lt.merge(df1, df2, merge_type='1:m', model="all-MiniLM-L6-v2", l
 def extract_numbers(text):
     return re.findall(r'\d+', text)
 
-# Function to calculate the penalty
-def calculate_penalty(row):
+# # Function to calculate the penalty
+# def calculate_penalty(row):
+#     numbers_a = extract_numbers(row['SAP_TEXT'])
+#     numbers_b = extract_numbers(row['PLANT_TEXT'])
+#     if numbers_a != numbers_b:
+#         return 0.5
+#     else:
+#         return -0.5
+#     return 0
+
+# Function to calculate penalty dynamically
+def calculate_dynamic_penalty(row):
     numbers_a = extract_numbers(row['SAP_TEXT'])
     numbers_b = extract_numbers(row['PLANT_TEXT'])
-    if numbers_a != numbers_b:
-        return 0.5
-    else:
-        return -0.5
-    return 0
+    
+    # Count mismatches
+    mismatch_count = sum(1 for a, b in zip(numbers_a, numbers_b) if a != b)
+    mismatch_count += abs(len(numbers_a) - len(numbers_b))  # Account for unequal lengths
+    
+    # Derive penalty: each mismatch adds 10 points to the penalty
+    penalty = mismatch_count * 0.1
+    return row['score'] - penalty
 
-# Apply the penalty calculation
-df_lm_matched['PENALTY'] = df_lm_matched.apply(calculate_penalty, axis=1)
+# Apply dynamic penalty calculation
+df_lm_matched['score'] = df_lm_matched.apply(calculate_dynamic_penalty, axis=1)
 
-# Subtract the penalty from the score
-df_lm_matched['ADJ_SCORE'] = df_lm_matched['score'] - df_lm_matched['PENALTY']
+# # Apply the penalty calculation
+# df_lm_matched['PENALTY'] = df_lm_matched.apply(calculate_penalty, axis=1)
+
+# # Subtract the penalty from the score
+# df_lm_matched['ADJ_SCORE'] = df_lm_matched['score'] - df_lm_matched['PENALTY']
 
 
-columns_to_front = ['MATNR', 'ALL_TEXTS', 'DESCRIPTION', 'ADJ_SCORE', 'PLANT', 'PROJECT_NAME']
+columns_to_front = ['MATNR', 'ALL_TEXTS', 'DESCRIPTION', 'score', 'PLANT', 'PROJECT_NAME']
 # Reorder the columns
 new_column_order = columns_to_front + [col for col in df_lm_matched.columns if col not in columns_to_front]
 df_lm_matched = df_lm_matched[new_column_order]
 # Convert all columns to string except 'ADJ_SCORE'
-columns_to_convert = [col for col in df_lm_matched.columns if col != 'ADJ_SCORE']
+columns_to_convert = [col for col in df_lm_matched.columns if col != 'score']
 df_lm_matched[columns_to_convert] = df_lm_matched[columns_to_convert].astype(str)
 
 # Function to set ADJ_SCORE to zero if specific strings are present
@@ -77,12 +93,12 @@ def adjust_score(row):
     # Check if any of the target phrases are in the description
     if any(phrase in description for phrase in phrases_to_set_zero):
         return float("-inf")  # Set ADJ_SCORE to zero
-    return row['ADJ_SCORE']  # Keep original score
+    return row['score']  # Keep original score
 
 # Apply the function to adjust scores
-df_lm_matched['ADJ_SCORE'] = df_lm_matched.apply(adjust_score, axis=1)
+df_lm_matched['score'] = df_lm_matched.apply(adjust_score, axis=1)
 
-df_lm_matched.sort_values(by='ADJ_SCORE', ascending=False, inplace=True)
+df_lm_matched.sort_values(by='score', ascending=False, inplace=True)
 
 st.set_page_config(layout="wide", page_title="Houston Turn Around Materials" )
 st.title("Houston Turn Around Materials")
